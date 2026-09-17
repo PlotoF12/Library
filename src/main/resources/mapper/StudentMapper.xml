@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.library.module.user.mapper.StudentMapper">
+
+    <select id="selectViolationCountForUpdate" resultType="int">
+        SELECT violation_count FROM student WHERE id = #{studentId} FOR UPDATE
+    </select>
+
+    <update id="incrementViolationAndBan">
+        UPDATE student
+        SET violation_count = violation_count + 1,
+            banned_until = CASE WHEN violation_count + 1 >= #{threshold}
+                                THEN DATE_ADD(NOW(), INTERVAL #{banDays} DAY)
+                                ELSE banned_until END
+        WHERE id = #{studentId}
+    </update>
+
+    <update id="resetViolationCount">
+        UPDATE student SET violation_count = 0, banned_until = NULL WHERE id = #{studentId}
+    </update>
+
+</mapper>

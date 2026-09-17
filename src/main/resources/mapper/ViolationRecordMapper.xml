@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.library.module.reservation.mapper.ViolationRecordMapper">
+
+    <!-- BaseMapper.insert(T) 由 MyBatis Plus 自动提供，自定义插入使用 insertRecord -->
+    <insert id="insertRecord">
+        INSERT INTO violation_record (student_id, reservation_id, violation_type,
+                                       penalty_start, penalty_end)
+        VALUES (#{studentId}, #{reservationId}, #{violationType},
+                #{penaltyStart}, #{penaltyEnd})
+    </insert>
+
+    <select id="countActivePenalties" resultType="int">
+        SELECT COUNT(*) FROM violation_record
+        WHERE student_id = #{studentId} AND penalty_end >= #{today}
+    </select>
+
+</mapper>

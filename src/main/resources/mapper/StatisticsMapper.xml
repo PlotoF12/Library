@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.library.module.statistics.mapper.StatisticsMapper">
+
+    <select id="countViolations" resultType="int">
+        SELECT COUNT(*) FROM reservation WHERE status = 4
+        <if test="startDate != null">AND reserve_date >= #{startDate}</if>
+        <if test="endDate != null">AND reserve_date &lt;= #{endDate}</if>
+    </select>
+
+    <select id="countCurrentlyBanned" resultType="int">
+        SELECT COUNT(*) FROM student WHERE banned_until >= #{today}
+    </select>
+
+    <select id="topViolators" resultType="map">
+        SELECT s.student_no, s.name, s.violation_count, s.banned_until
+        FROM student s
+        WHERE s.violation_count > 0
+        ORDER BY s.violation_count DESC
+        LIMIT #{limit}
+    </select>
+
+    <select id="seatUsageRate" resultType="map">
+        SELECT r.room_id, sr.name AS room_name,
+               COUNT(*) AS total_reservations,
+               AVG(TIMESTAMPDIFF(MINUTE, r.actual_sign_time, r.actual_leave_time)) AS avg_usage_min
+        FROM reservation r
+        JOIN study_room sr ON r.room_id = sr.id
+        WHERE r.reserve_date = #{date} AND r.status = 3
+        GROUP BY r.room_id, sr.name
+    </select>
+
+</mapper>

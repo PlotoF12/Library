@@ -1,0 +1,27 @@
+# =============================================================
+# 开发环境配置
+# =============================================================
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update       # 开发环境自动建表
+    show-sql: true
+
+  # ---- 开发用H2数据库（取消注释以使用内嵌数据库）----
+  # datasource:
+  #   url: jdbc:h2:mem:seat_reservation;DB_CLOSE_DELAY=-1
+  #   driver-class-name: org.h2.Driver
+  #   username: sa
+  #   password:
+
+logging:
+  level:
+    com.example.library: DEBUG
+    com.baomidou.mybatisplus: DEBUG
+    org.hibernate.SQL: DEBUG
+
+app:
+  notification:
+    sms-enabled: false       # 开发环境关闭短信
+  jwt:
+    secret: xZHiOZ/ryAxzr89cUFsrkNMuXnrTC+o0YQtj6kmM5zfaEE5L18qRN+xeMY7uD0AnJVV55N2KrHGKXiNmDKAdJg==
